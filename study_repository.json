@@ -1,0 +1,82 @@
+[
+  {
+    "study_name": "GLYMETY",
+    "n_participants": "",
+    "n_expected_participants": ""
+  },
+  {
+    "study_name": "REMODAL",
+    "n_participants": "7",
+    "n_expected_participants": "32"
+  },
+  {
+    "study_name": "LATITUDE",
+    "n_participants": "",
+    "n_expected_participants": ""
+  },
+  {
+    "study_name": "CASPER",
+    "n_participants": "",
+    "n_expected_participants": ""
+  },
+  {
+    "study_name": "EMPA-6",
+    "n_participants": "10",
+    "n_expected_participants": "15"
+  },
+  {
+    "study_name": "ProspeC-F",
+    "n_participants": "43",
+    "n_expected_participants": "43"
+  },
+  {
+    "study_name": "SugarNSalt",
+    "n_participants": "1",
+    "n_expected_participants": "15"
+  },
+  {
+    "study_name": "Tirzepatide",
+    "n_participants": "",
+    "n_expected_participants": ""
+  },
+  {
+    "study_name": "Cohorte FK",
+    "n_participants": "",
+    "n_expected_participants": ""
+  },
+  {
+    "study_name": "Beta-Preserve",
+    "n_participants": "",
+    "n_expected_participants": "2"
+  },
+  {
+    "study_name": "CFTR-DbT1",
+    "n_participants": "",
+    "n_expected_participants": ""
+  },
+  {
+    "study_name": "CREATE-1",
+    "n_participants": "",
+    "n_expected_participants": ""
+  },
+  {
+    "study_name": "FEDERATE",
+    "n_participants": "0",
+    "n_expected_participants": "1000"
+  },
+  {
+    "study_name": "GLYCO-OSTEO",
+    "n_participants": "8",
+    "n_expected_participants": "20"
+  },
+  {
+    "study_name": "SugarSwing",
+    "n_participants": "",
+    "n_expected_participants": ""
+  },
+  {
+    "study_name": "AIDE-1",
+    "n_participants": "60",
+    "n_expected_participants": "60"
+  }
+]

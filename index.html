@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Study Audit Roulette</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Study Audit Roulette</h1>
+    
+    <!-- Tab Navigation -->
+    <div class="tabs">
+      <button class="tab-button active" onclick="switchTab('roulette')">Audit Roulette</button>
+      <button class="tab-button" onclick="switchTab('checklist')">Audit Checklist</button>
+      <button class="tab-button" onclick="switchTab('history')">Audit History</button>
+    </div>
+    
+    <!-- Roulette Tab -->
+    <div id="roulette-tab" class="tab-content active">
+    <section>
+      <h2>1. Load Data</h2>
+      <div style="margin-bottom:10px">
+        <strong>Studies:</strong>
+        <input type="file" id="excelFile" accept=".xlsx,.xls" onchange="loadExcelFile()" />
+        <span style="font-size:0.9em; color:#666"> (Upload Excel file with columns: study_name, n_participants, n_expected_participants)</span>
+      </div>
+      <div id="dataStatus"></div>
+    </section>
+    <section id="mainUI" style="display:none">
+      <h2>2. Select Items</h2>
+      <div class="flex">
+        <div>
+          <strong>Studies</strong>
+          <button onclick="selectAll('studies', true)" style="margin-left:10px">Select All</button>
+          <button onclick="selectAll('studies', false)">Deselect All</button>
+          <ul id="studyList"></ul>
+        </div>
+        <div>
+          <strong>Team Members</strong>
+          <button onclick="selectAll('team', true)" style="margin-left:10px">Select All</button>
+          <button onclick="selectAll('team', false)">Deselect All</button>
+          <div style="margin-top:10px">
+            <input type="text" id="newMemberName" placeholder="New member name" style="width:200px" />
+            <button onclick="addTeamMember()">Add Member</button>
+            <button onclick="saveTeamJSON()">Save Team to JSON</button>
+          </div>
+          <ul id="memberList"></ul>
+        </div>
+      </div>
+      <label>
+        Audit percentage:
+        <input id="auditPct" type="number" value="30" min="1" max="100" style="width:40px" />
+        %
+      </label>
+      <h2>3. Spin!</h2>
+      <button id="spinBtn" onclick="runRoulette()">Spin Roulette (Study + Member)</button>
+      <button onclick="randomMemberOnly()" style="margin-left:10px">Random Member Only</button>
+      <div id="resultSection">
+        <div class="result" id="studySpin"></div>
+        <div class="result" id="memberSpin"></div>
+      </div>
+      <h2>Audit Assignments Log</h2>
+      <button onclick="downloadLog()">Export Log (CSV)</button>
+      <table id="logTable" border="1" style="margin-top:10px">
+        <thead>
+          <tr><th>Date</th><th>Study</th><th>Participants</th><th>To Audit</th><th>Auditor</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+    </div>
+    
+    <!-- Audit Checklist Tab -->
+    <div id="checklist-tab" class="tab-content">
+      <h2>Audit Checklist</h2>
+      <p style="color:#666; font-style:italic;">This section can be customized with your audit checklist items.</p>
+      <div style="padding:20px; background:#f9f9f9; border-radius:8px; margin-top:20px;">
+        <h3>Add your checklist items here:</h3>
+        <ul>
+          <li>Verify participant consent forms</li>
+          <li>Check data entry accuracy</li>
+          <li>Review adverse event reporting</li>
+          <li>Confirm protocol compliance</li>
+          <li>Validate source documents</li>
+        </ul>
+        <p style="margin-top:20px;"><em>You can edit this section in the HTML file.</em></p>
+      </div>
+    </div>
+    
+    <!-- Audit History Tab -->
+    <div id="history-tab" class="tab-content">
+      <h2>Audit History</h2>
+      <p>Track all audits assigned and mark them as completed.</p>
+      <button onclick="clearHistory()" style="background:#dc3545; margin-bottom:15px">Clear All History</button>
+      <button onclick="exportHistory()" style="margin-bottom:15px; margin-left:10px">Export History (CSV)</button>
+      <div id="historyList"></div>
+    </div>
+    
+    <footer>
+      <small>
+        All local. Place <code>index.html</code>, <code>script.js</code>, <code>style.css</code>, <code>team.json</code> in same folder.<br>
+        Upload an Excel file for studies or click Add Member to manage the team. Load with a modern browser.<br>
+        <strong>Note:</strong> Requires xlsx library. Add: <code>&lt;script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"&gt;&lt;/script&gt;</code>
+      </small>
+    </footer>
+    <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
