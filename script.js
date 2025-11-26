@@ -308,11 +308,13 @@ function runRoulette() {
       let memberObj = availableAuditors[memberIdx];
       let toAudit = Math.ceil((auditPct/100)*participantCount);
       let date = new Date().toLocaleString();
-      showResult(
-        studyObj, memberObj, toAudit, false,
+      
+      // Display result in studySpin only
+      document.getElementById('studySpin').innerHTML = 
         `🎯 <b>${studyObj.name}</b> selected, audit <b>${toAudit}/${participantCount}</b> participants.<br>
-        🕵️ Auditor: <b>${memberObj.name}</b>`
-      );
+        🕵️ Auditor: <b>${memberObj.name}</b>`;
+      document.getElementById('memberSpin').innerHTML = '';
+      
       // Log row
       log.push({date, study:studyObj.name, participants:participantCount, toAudit, member:memberObj.name});
       renderLog();
