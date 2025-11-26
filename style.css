@@ -191,6 +191,12 @@ body {
     display: flex;
     gap: 36px;
     flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.flex > div {
+    flex: 1;
+    min-width: 300px;
 }
 
 /* Listes */

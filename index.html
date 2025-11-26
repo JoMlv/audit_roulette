@@ -32,18 +32,17 @@
       <div class="flex">
         <div>
           <strong>Studies</strong>
-          <button onclick="selectAll('studies', true)" style="margin-left:10px">Select All</button>
-          <button onclick="selectAll('studies', false)">Deselect All</button>
+          <button onclick="selectAll('studies', true)" style="margin-left:10px; padding:6px 12px; font-size:0.9rem">Select All</button>
+          <button onclick="selectAll('studies', false)" style="padding:6px 12px; font-size:0.9rem">Deselect All</button>
           <ul id="studyList"></ul>
         </div>
         <div>
           <strong>Team Members</strong>
-          <button onclick="selectAll('team', true)" style="margin-left:10px">Select All</button>
-          <button onclick="selectAll('team', false)">Deselect All</button>
+          <button onclick="selectAll('team', true)" style="margin-left:10px; padding:6px 12px; font-size:0.9rem">Select All</button>
+          <button onclick="selectAll('team', false)" style="padding:6px 12px; font-size:0.9rem">Deselect All</button>
           <div style="margin-top:10px">
-            <input type="text" id="newMemberName" placeholder="New member name" style="width:200px" />
-            <button onclick="addTeamMember()">Add Member</button>
-            <button onclick="saveTeamJSON()">Save Team to JSON</button>
+            <input type="text" id="newMemberName" placeholder="New member name" style="width:150px; padding:6px; font-size:0.9rem" />
+            <button onclick="addTeamMember()" style="padding:6px 12px; font-size:0.9rem">Add Member</button>
           </div>
           <ul id="memberList"></ul>
         </div>
@@ -55,7 +54,7 @@
       </label>
       <h2>3. Spin!</h2>
       <button id="spinBtn" onclick="runRoulette()">Spin Roulette (Study + Member)</button>
-      <button onclick="randomMemberOnly()" style="margin-left:10px">Random Member Only</button>
+      <button onclick="randomStudyOnly()" style="margin-left:10px">Random Study Only</button>
       <div id="resultSection">
         <div class="result" id="studySpin"></div>
         <div class="result" id="memberSpin"></div>

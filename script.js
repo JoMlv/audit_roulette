@@ -64,6 +64,7 @@ function loadExcelFile() {
         name: s.study_name || s.Study || s.name || '',
         participants: parseInt(s.n_participants || s.participants || 0) || 0,
         expected: parseInt(s.n_expected_participants || s.expected || 0) || 0,
+        personInCharge: s.person_in_charge || s.personInCharge || s.responsible || '',
         selected: true
       }));
       
@@ -150,14 +151,30 @@ function renderLists() {
   sUl.innerHTML = '';
   studies.forEach((s, i) => {
     let el = document.createElement('li');
+    el.style.marginBottom = '8px';
+    
     let box = document.createElement('input');
     box.type = "checkbox";
     box.checked = !!s.selected;
     box.onchange = () => { s.selected = box.checked; };
     el.appendChild(box);
+    
     let participantText = s.participants > 0 ? s.participants : s.expected;
     let suffix = s.participants > 0 ? '' : ' expected';
-    el.append(" " + s.name + " (" + participantText + suffix + ")");
+    let label = " " + s.name + " (" + participantText + suffix + ")";
+    el.append(label);
+    
+    if (s.personInCharge) {
+      let inChargeSpan = document.createElement('span');
+      inChargeSpan.style.display = 'block';
+      inChargeSpan.style.marginLeft = '24px';
+      inChargeSpan.style.fontSize = '0.85em';
+      inChargeSpan.style.color = 'var(--brand-gray)';
+      inChargeSpan.style.fontStyle = 'italic';
+      inChargeSpan.textContent = `↳ In charge: ${s.personInCharge}`;
+      el.appendChild(inChargeSpan);
+    }
+    
     sUl.appendChild(el);
   });
   // Members
@@ -176,7 +193,14 @@ function renderLists() {
     let removeBtn = document.createElement('button');
     removeBtn.textContent = '✕';
     removeBtn.style.marginLeft = '10px';
-    removeBtn.style.fontSize = '0.8em';
+    removeBtn.style.padding = '2px 6px';
+    removeBtn.style.fontSize = '0.75em';
+    removeBtn.style.backgroundColor = 'var(--brand-accent)';
+    removeBtn.style.color = 'white';
+    removeBtn.style.border = 'none';
+    removeBtn.style.borderRadius = '4px';
+    removeBtn.style.cursor = 'pointer';
+    removeBtn.style.lineHeight = '1';
     removeBtn.onclick = () => { removeMember(i); };
     el.appendChild(removeBtn);
     
@@ -248,18 +272,40 @@ function runRoulette() {
   
   let auditPct = Math.max(1, Math.min(100, Number(document.getElementById('auditPct').value)||30));
   
-  // Pick winners immediately
+  // Pick study first
   let studyIdx = Math.floor(Math.random() * selStudies.length);
-  let memberIdx = Math.floor(Math.random() * selMembers.length);
+  let studyObj = selStudies[studyIdx];
+  
+  // Filter out people in charge from available auditors
+  // Parse multiple people separated by +
+  let peopleInCharge = [];
+  if (studyObj.personInCharge) {
+    peopleInCharge = studyObj.personInCharge
+      .split('+')
+      .map(name => name.trim().toLowerCase())
+      .filter(name => name.length > 0);
+  }
+  
+  let availableAuditors = selMembers.filter(m => 
+    !peopleInCharge.includes(m.name.trim().toLowerCase())
+  );
+  
+  if(availableAuditors.length === 0) {
+    alert(`No available auditors for ${studyObj.name}. All selected team members are in charge of this study (${studyObj.personInCharge}).`);
+    document.getElementById('spinBtn').disabled = false;
+    return;
+  }
+  
+  let memberIdx = Math.floor(Math.random() * availableAuditors.length);
   
   // Animate study selection
   animateSpin('studySpin', selStudies.map(s=>s.name), studyIdx, ()=>{
     let studyObj = selStudies[studyIdx];
     let participantCount = studyObj.participants > 0 ? studyObj.participants : studyObj.expected;
     
-    // Animate member selection
-    animateSpin('memberSpin', selMembers.map(m=>m.name), memberIdx, ()=>{
-      let memberObj = selMembers[memberIdx];
+    // Animate member selection with available auditors only
+    animateSpin('memberSpin', availableAuditors.map(m=>m.name), memberIdx, ()=>{
+      let memberObj = availableAuditors[memberIdx];
       let toAudit = Math.ceil((auditPct/100)*participantCount);
       let date = new Date().toLocaleString();
       showResult(
@@ -322,23 +368,25 @@ function animateSpin(divId, items, winnerIdx, cb) {
   tick();
 }
 
-function randomMemberOnly() {
-  let selMembers = team.filter(m=>m.selected);
-  if(selMembers.length===0) {
-    alert('You must have at least one team member selected!');
+function randomStudyOnly() {
+  let selStudies = studies.filter(s=>s.selected);
+  if(selStudies.length===0) {
+    alert('You must have at least one study selected!');
     return;
   }
   
-  // Clear study result
-  document.getElementById('studySpin').innerHTML = '';
+  // Clear member result
+  document.getElementById('memberSpin').innerHTML = '';
   
   // Pick winner immediately
-  let memberIdx = Math.floor(Math.random() * selMembers.length);
+  let studyIdx = Math.floor(Math.random() * selStudies.length);
   
-  // Animate member selection
-  animateSpin('memberSpin', selMembers.map(m=>m.name), memberIdx, ()=>{
-    let memberObj = selMembers[memberIdx];
-    document.getElementById('memberSpin').innerHTML = `🕵️ Selected Member: <b>${memberObj.name}</b>`;
+  // Animate study selection
+  animateSpin('studySpin', selStudies.map(s=>s.name), studyIdx, ()=>{
+    let studyObj = selStudies[studyIdx];
+    let pct = parseInt(document.getElementById('auditPct').value) || 30;
+    let toAudit = Math.max(1, Math.round(studyObj.participants * pct / 100));
+    document.getElementById('studySpin').innerHTML = `📚 Selected Study: <b>${studyObj.name}</b><br>Participants: ${studyObj.participants} → Audit: ${toAudit}`;
   });
 }
 
